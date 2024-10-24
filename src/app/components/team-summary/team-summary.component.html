@@ -1,0 +1,11 @@
+<div class="team-summary">
+    <h2>Team Summary</h2>
+    <div class="type-coverage">
+        <h3>Type Coverage</h3>
+        <ul>
+            <li *ngFor="let type of getTypes()">
+                {{ type | titlecase }}: {{ typeCounts[type] }}
+            </li>
+        </ul>
+    </div>
+</div>

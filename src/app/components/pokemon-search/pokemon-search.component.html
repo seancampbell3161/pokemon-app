@@ -1,0 +1,22 @@
+<p-autoComplete
+  [(ngModel)]="searchControl.value"
+  [suggestions]="filteredPokemons"
+  (completeMethod)="onSearch($event)"
+  (onSelect)="onSelect($event)"
+  field="name"
+  [dropdown]="true"
+  [forceSelection]="true"
+  placeholder="Search Pokémon"
+  [minLength]="3"
+>
+  <ng-template let-pokemon pTemplate="item">
+    <div class="pokemon-suggestion-item">
+      <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" width="40" />
+      <span>{{ pokemon.name | titlecase }}</span>
+    </div>
+  </ng-template>
+</p-autoComplete>
+
+<div *ngIf="isLoading" class="loading-spinner">
+  <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+</div>

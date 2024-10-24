@@ -1,0 +1,19 @@
+.pokemon-suggestion-item {
+  display: flex;
+  align-items: center;
+}
+
+.pokemon-suggestion-item img {
+  margin-right: 10px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.custom-spinner .p-progress-spinner {
+  width: 30px;
+  height: 30px;
+}
