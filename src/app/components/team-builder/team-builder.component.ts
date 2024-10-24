@@ -5,6 +5,7 @@ import { TeamModelService } from '../../services/team-model.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { Pokemon } from '../../models/pokeapi-models';
 import { PokemonSearchComponent } from '../pokemon-search/pokemon-search.component';
+import { TeamPokemon } from '../../models/team-pokemon';
 
 @Component({
   selector: 'app-team-builder',
@@ -29,22 +30,6 @@ export class TeamBuilderComponent implements OnInit {
     this.initSubscribers();
   }
 
-  private initSubscribers() {
-    this.teamService.getTeam().subscribe(team => {
-      this.updateFormArray(team);
-    })
-  }
-
-  private updateFormArray(team: Pokemon[]): void {
-    while (this.pokemon.length !== 0) {
-      this.pokemon.removeAt(0);
-    }
-
-    team.forEach(pokemon => {
-      this.addPokemonToForm(pokemon);
-    });
-  }
-
   addPokemon(pokemon: Pokemon): void {
     if (!this.teamService.isPokemonInTeam(pokemon.id)) {
       this.teamService.addPokemon(pokemon);
@@ -67,15 +52,32 @@ export class TeamBuilderComponent implements OnInit {
 
   submitTeam(): void {
     if (this.teamForm.valid) {
-      window.alert(`Team Submitted: ${this.teamForm.value}`);
+      const teamPokemon: TeamPokemon[] = this.pokemon.value;
+      window.alert(`Team Submitted: ${teamPokemon.map(p => p.name).join(', ')}`);
     } else {
       this.teamForm.markAllAsTouched();
-    }
+    } 
   }
 
   private initForm(): void {
     this.teamForm = this.fb.group({
       pokemon: this.fb.array([], [Validators.maxLength(this.maxTeamSize), this.noDuplicatePokemon])
+    });
+  }
+
+  private initSubscribers() {
+    this.teamService.getTeam().subscribe(team => {
+      this.updateFormArray(team);
+    })
+  }
+
+  private updateFormArray(team: Pokemon[]): void {
+    while (this.pokemon.length !== 0) {
+      this.pokemon.removeAt(0);
+    }
+
+    team.forEach(pokemon => {
+      this.addPokemonToForm(pokemon);
     });
   }
 
