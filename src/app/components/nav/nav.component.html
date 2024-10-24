@@ -1,5 +1,7 @@
 <nav class="nav-bar">
     <span>Pokémon Team Builder</span>
     <span>Team Size: {{ teamCount }}/6</span>
-    <button mat-button color="warn" (click)="clearTeam()">Clear Team</button>
+    <button (click)="clearTeam()">Clear Team</button>
+    <button><a [routerLink]="['/summary']">Summary</a></button>
+    <button><a [routerLink]="['/']">Manage Team</a></button>
 </nav>

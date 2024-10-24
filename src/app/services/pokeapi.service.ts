@@ -21,9 +21,8 @@ export class PokeapiService {
     return this.http.get<any>(`${this.apiUrl}/pokemon?limit=10000`).pipe(
       map(response => response.results),
       map((allPokemons: any[]) => {
-        // Filter Pokémon whose names start with the query
         const matchedPokemons = allPokemons.filter(pokemon => pokemon.name.startsWith(query));
-        // Limit to first 10 results
+        // limit to first 10 results
         return matchedPokemons.slice(0, 10);
       }),
       switchMap((pokemonRes: any[]) => {
@@ -32,7 +31,7 @@ export class PokeapiService {
         return forkJoin([...requests]);
       }),
       tap(pokemons => this.cache.set(query, pokemons)),
-      catchError(() => of([])) // Return an empty array in case of error
+      catchError(() => of([]))
     );
   }
 
