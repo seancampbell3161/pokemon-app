@@ -31,9 +31,7 @@ export class TeamBuilderComponent implements OnInit {
   }
 
   addPokemon(pokemon: Pokemon): void {
-    if (!this.teamService.isPokemonInTeam(pokemon.id)) {
-      this.teamService.addPokemon(pokemon);
-    }
+    this.teamService.addPokemon(pokemon);
   }
 
   removePokemon(index: number): void {
@@ -61,7 +59,7 @@ export class TeamBuilderComponent implements OnInit {
 
   private initForm(): void {
     this.teamForm = this.fb.group({
-      pokemon: this.fb.array([], [Validators.maxLength(this.maxTeamSize), this.noDuplicatePokemon])
+      pokemon: this.fb.array([], [Validators.maxLength(this.maxTeamSize), this.noDuplicatePokemon()])
     });
   }
 

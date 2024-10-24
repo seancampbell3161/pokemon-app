@@ -16,7 +16,7 @@
       </div>
     </div>
   
-    <div *ngIf="teamForm.hasError('duplicatePokemon') && teamForm.touched" class="error">
+    <div *ngIf="teamForm.invalid" class="error mb-2 mt-2">
       Duplicate Pokémon are not allowed in the team.
     </div>
   

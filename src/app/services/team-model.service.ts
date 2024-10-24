@@ -24,9 +24,7 @@ export class TeamModelService {
       return;
     }
 
-    if (!this.isPokemonInTeam(pokemon.id)) {
-      this.team$.next([...this.team$.getValue(), pokemon]);
-    }
+    this.team$.next([...this.team$.getValue(), pokemon]);
   }
 
   removePokemon(index: number) {
