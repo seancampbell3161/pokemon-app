@@ -32,7 +32,8 @@ export class TeamModelService {
       this.team$.next([]);
     }
     
-    this.team$.next(this.team$.getValue().splice(index, 1));
+    this.team$.getValue().splice(index, 1);
+    this.team$.next(this.team$.getValue());
   }
 
   clearTeam(): void {

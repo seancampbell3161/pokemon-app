@@ -1,5 +1,6 @@
-<p-autoComplete
-  [(ngModel)]="searchControl.value"
+<form [formGroup]="searchForm">
+  <p-autoComplete
+  formControlName="search"
   [suggestions]="filteredPokemons"
   (completeMethod)="onSearch($event)"
   (onSelect)="onSelect($event)"
@@ -16,6 +17,8 @@
     </div>
   </ng-template>
 </p-autoComplete>
+</form>
+
 
 <div *ngIf="isLoading" class="loading-spinner">
   <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
