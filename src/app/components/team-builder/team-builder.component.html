@@ -11,7 +11,7 @@
       <div *ngFor="let pokemonGroup of pokemon.controls; let i = index" [formGroupName]="i">
         <app-pokemon-card
           [pokemon]="pokemonGroup.value"
-          (remove)="removePokemon(i)">
+          (remove)="removePokemon(pokemonGroup.get('id')?.value)">
         </app-pokemon-card>
       </div>
     </div>

@@ -1,46 +1,58 @@
-import { Injectable } from '@angular/core';
+import { Injectable, computed, effect, signal } from '@angular/core';
 import { Pokemon } from '../models/pokeapi-models';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+export interface PokemonTeamState {
+  team: Pokemon[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class TeamModelService {
 
-  private team$: BehaviorSubject<Pokemon[]> = new BehaviorSubject<Pokemon[]>([]);
+  private state = signal<PokemonTeamState>({ team: [] });
 
-  constructor() { }
+  team = computed(() => this.state().team);
+  teamCount = computed(() => this.state().team.length)
 
-  getTeam(): Observable<Pokemon[]> {
-    return this.team$.asObservable();
-  }
+  addPokemon$ = new Subject<Pokemon>();
+  removePokemon$ = new Subject<number>();
+  resetTeam$ = new Subject<null>();
 
-  getTeamValue(): Pokemon[] {
-    return this.team$.getValue();
-  }
+  constructor() {
+    this.addPokemon$.pipe(takeUntilDestroyed()).subscribe((pokemon) => 
+      this.state.update((state) => ({
+        ...state,
+        team: [
+          ...state.team,
+          {
+            ...pokemon,
+          }
+        ]
+      }))
+    );
 
-  addPokemon(pokemon: Pokemon) {
-    if (this.team$.getValue().length >= 6) {
-      return;
-    }
+    this.removePokemon$.pipe(takeUntilDestroyed()).subscribe((id) => {
+      if (this.state().team.length < 2) { this.state.update((state) => ({ ...state, team: [] })); }
+      else { 
+        this.state.update((state) => ({
+          ...state,
+          team: state.team.filter(p => p.id !== id)
+        })); 
+      }
+    });
 
-    this.team$.next([...this.team$.getValue(), pokemon]);
-  }
-
-  removePokemon(index: number) {
-    if (this.team$.getValue().length === 1) {
-      this.team$.next([]);
-    }
-    
-    this.team$.getValue().splice(index, 1);
-    this.team$.next(this.team$.getValue());
-  }
-
-  clearTeam(): void {
-    this.team$.next([]);
+    this.resetTeam$.pipe(takeUntilDestroyed()).subscribe(() => 
+      this.state.update((state) => ({
+        ...state,
+        team: [],
+      }))
+    );
   }
 
   isPokemonInTeam(pokemonId: number): boolean {
-    return this.team$.getValue().some(p => p.id === pokemonId);
+    return this.state().team.some(p => p.id === pokemonId);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { Pokemon } from '../../models/pokeapi-models';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
@@ -16,7 +16,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   styleUrl: './pokemon-search.component.scss'
 })
 export class PokemonSearchComponent {
-  @Output() pokemonSelected = new EventEmitter<Pokemon>();
+  pokemonSelected = output<Pokemon>();
   
   searchForm: FormGroup
   filteredPokemons: Pokemon[] = [];

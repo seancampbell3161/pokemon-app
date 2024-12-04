@@ -1,5 +1,5 @@
 import { NgFor, TitleCasePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Pokemon } from '../../models/pokeapi-models';
 import { TeamModelService } from '../../services/team-model.service';
 
@@ -11,16 +11,15 @@ import { TeamModelService } from '../../services/team-model.service';
   styleUrl: './team-summary.component.scss'
 })
 export class TeamSummaryComponent {
-  team: Pokemon[] = [];
+  private teamService = inject(TeamModelService);
+
+  team: Pokemon[] = this.teamService.team();
   typeCounts: { [type: string]: number } = {};
 
-  constructor(private teamService: TeamModelService) {}
+  constructor() {}
 
   ngOnInit(): void {
-    this.teamService.getTeam().subscribe(team => {
-      this.team = team;
-      this.calculateTypeCoverage();
-    });
+    this.calculateTypeCoverage()
   }
 
   calculateTypeCoverage(): void {

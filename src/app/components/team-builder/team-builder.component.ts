@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { TeamModelService } from '../../services/team-model.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
@@ -19,23 +19,24 @@ export class TeamBuilderComponent implements OnInit {
   teamForm!: FormGroup;
   maxTeamSize: number = 6;
 
-  constructor(private fb: FormBuilder, private teamService: TeamModelService) {}
+  constructor(private fb: FormBuilder, private teamService: TeamModelService) {
+    effect(() => this.updateFormArray(this.teamService.team()))
+  }
 
   get pokemon(): FormArray {
-    return this.teamForm.get('pokemon') as FormArray;
+    return this.teamForm?.get('pokemon') as FormArray;
   }
 
   ngOnInit(): void {
     this.initForm();
-    this.initSubscribers();
   }
 
   addPokemon(pokemon: Pokemon): void {
-    this.teamService.addPokemon(pokemon);
+    this.teamService.addPokemon$.next(pokemon);
   }
 
-  removePokemon(index: number): void {
-    this.teamService.removePokemon(index);
+  removePokemon(id: number): void {
+    this.teamService.removePokemon$.next(id);
   }
 
   addPokemonToForm(pokemon: Pokemon): void {
@@ -63,14 +64,8 @@ export class TeamBuilderComponent implements OnInit {
     });
   }
 
-  private initSubscribers() {
-    this.teamService.getTeam().subscribe(team => {
-      this.updateFormArray(team);
-    })
-  }
-
   private updateFormArray(team: Pokemon[]): void {
-    while (this.pokemon.length !== 0) {
+    while (this.pokemon && this.pokemon?.length !== 0) {
       this.pokemon.removeAt(0);
     }
 

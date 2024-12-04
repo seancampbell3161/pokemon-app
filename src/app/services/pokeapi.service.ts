@@ -26,7 +26,7 @@ export class PokeapiService {
         return matchedPokemons.slice(0, 10);
       }),
       switchMap((pokemonRes: any[]) => {
-        // Fetch detailed data for each matched Pokémon
+        // fetch detailed data for each matched Pokemon
         const requests = pokemonRes.map(pokemon => this.getPokemonByName(pokemon.name));
         return forkJoin([...requests]);
       }),

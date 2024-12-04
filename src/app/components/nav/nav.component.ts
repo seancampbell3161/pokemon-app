@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TeamModelService } from '../../services/team-model.service';
 import { Router, RouterLink } from '@angular/router';
 
@@ -10,17 +10,11 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './nav.component.scss'
 })
 export class NavComponent {
-  teamCount: number = 0;
+  private teamService = inject(TeamModelService);
 
-  constructor(private teamService: TeamModelService) {}
-
-  ngOnInit(): void {
-    this.teamService.getTeam().subscribe(team => {
-      this.teamCount = team.length;
-    });
-  }
+  teamCount: number = this.teamService.teamCount();
 
   clearTeam(): void {
-    this.teamService.clearTeam();
+    this.teamService.resetTeam$.next(null);
   }
 }
