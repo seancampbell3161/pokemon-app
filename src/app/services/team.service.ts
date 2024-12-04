@@ -1,6 +1,6 @@
 import { Injectable, computed, effect, signal } from '@angular/core';
 import { Pokemon } from '../models/pokeapi-models';
-import { Subject } from 'rxjs';
+import { Subject, debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 export interface PokemonTeamState {
@@ -10,7 +10,7 @@ export interface PokemonTeamState {
 @Injectable({
   providedIn: 'root'
 })
-export class TeamModelService {
+export class TeamService {
 
   private state = signal<PokemonTeamState>({ team: [] });
 
@@ -22,7 +22,10 @@ export class TeamModelService {
   resetTeam$ = new Subject<null>();
 
   constructor() {
-    this.addPokemon$.pipe(takeUntilDestroyed()).subscribe((pokemon) => 
+    this.addPokemon$.pipe(
+      takeUntilDestroyed(),
+      debounceTime(100),
+      ).subscribe((pokemon) => 
       this.state.update((state) => ({
         ...state,
         team: [

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { TeamModelService } from '../../services/team-model.service';
+import { TeamService } from '../../services/team.service';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './nav.component.scss'
 })
 export class NavComponent {
-  private teamService = inject(TeamModelService);
+  private teamService = inject(TeamService);
 
   teamCount: number = this.teamService.teamCount();
 

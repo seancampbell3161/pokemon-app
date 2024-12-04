@@ -1,22 +1,23 @@
 <form [formGroup]="searchForm">
   <p-autoComplete
-  formControlName="search"
-  [suggestions]="filteredPokemons"
-  (completeMethod)="onSearch($event)"
-  (onSelect)="onSelect($event)"
-  field="name"
-  [dropdown]="true"
-  [forceSelection]="true"
-  placeholder="Search Pokémon"
-  [minLength]="3"
->
-  <ng-template let-pokemon pTemplate="item">
-    <div class="pokemon-suggestion-item">
-      <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" width="40" />
-      <span>{{ pokemon.name | titlecase }}</span>
-    </div>
-  </ng-template>
-</p-autoComplete>
+    formControlName="search"
+    [suggestions]="filteredPokemons"
+    (completeMethod)="onSearch($event)"
+    (onSelect)="onSelect($event)"
+    field="name"
+    [dropdown]="true"
+    [forceSelection]="true"
+    placeholder="Search Pokémon"
+    [minLength]="3"
+    [delay]="300"
+  >
+    <ng-template let-pokemon pTemplate="item">
+      <div class="pokemon-suggestion-item">
+        <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" width="40" />
+        <span>{{ pokemon.name | titlecase }}</span>
+      </div>
+    </ng-template>
+  </p-autoComplete>
 </form>
 
 

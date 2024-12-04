@@ -1,7 +1,7 @@
 import { NgFor, TitleCasePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Pokemon } from '../../models/pokeapi-models';
-import { TeamModelService } from '../../services/team-model.service';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'app-team-summary',
@@ -11,7 +11,7 @@ import { TeamModelService } from '../../services/team-model.service';
   styleUrl: './team-summary.component.scss'
 })
 export class TeamSummaryComponent {
-  private teamService = inject(TeamModelService);
+  private teamService = inject(TeamService);
 
   team: Pokemon[] = this.teamService.team();
   typeCounts: { [type: string]: number } = {};

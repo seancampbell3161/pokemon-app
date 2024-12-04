@@ -1,7 +1,11 @@
 <div class="team-builder" [formGroup]="teamForm">
     <h2>Create Your Pokémon Team</h2>
   
-    <app-pokemon-search (pokemonSelected)="addPokemon($event)"></app-pokemon-search>
+    <div class="search-menu">
+      <app-pokemon-search (pokemonSelected)="teamService.addPokemon$.next($event)"></app-pokemon-search>
+      <button (click)="submitTeam()" [disabled]="teamForm.invalid || teamForm.controls">Submit Team</button>
+    </div>
+    
   
     <div *ngIf="pokemon.controls.length === maxTeamSize" class="alert alert-info">
       You have reached the maximum team size.
@@ -11,14 +15,12 @@
       <div *ngFor="let pokemonGroup of pokemon.controls; let i = index" [formGroupName]="i">
         <app-pokemon-card
           [pokemon]="pokemonGroup.value"
-          (remove)="removePokemon(pokemonGroup.get('id')?.value)">
+          (remove)="teamService.removePokemon$.next(pokemonGroup.get('id')?.value)">
         </app-pokemon-card>
       </div>
     </div>
   
     <div *ngIf="teamForm.invalid" class="error mb-2 mt-2">
       Duplicate Pokémon are not allowed in the team.
-    </div>
-  
-    <button (click)="submitTeam()" [disabled]="teamForm.invalid">Submit Team</button>
+    </div> 
   </div>

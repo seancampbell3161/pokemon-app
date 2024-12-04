@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit, effect } from '@angular/core';
+import { Component, OnInit, effect, inject } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { TeamModelService } from '../../services/team-model.service';
+import { TeamService } from '../../services/team.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { Pokemon } from '../../models/pokeapi-models';
 import { PokemonSearchComponent } from '../pokemon-search/pokemon-search.component';
@@ -15,11 +15,14 @@ import { TeamPokemon } from '../../models/team-pokemon';
   styleUrl: './team-builder.component.scss'
 })
 export class TeamBuilderComponent implements OnInit {
+  public teamService = inject(TeamService);
+  private fb = inject(FormBuilder);
 
+  team: Pokemon[] = this.teamService.team();
   teamForm!: FormGroup;
   maxTeamSize: number = 6;
 
-  constructor(private fb: FormBuilder, private teamService: TeamModelService) {
+  constructor() {
     effect(() => this.updateFormArray(this.teamService.team()))
   }
 
@@ -29,14 +32,6 @@ export class TeamBuilderComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-  }
-
-  addPokemon(pokemon: Pokemon): void {
-    this.teamService.addPokemon$.next(pokemon);
-  }
-
-  removePokemon(id: number): void {
-    this.teamService.removePokemon$.next(id);
   }
 
   addPokemonToForm(pokemon: Pokemon): void {
