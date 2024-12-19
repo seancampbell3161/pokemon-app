@@ -26,15 +26,13 @@ export class TeamService {
       takeUntilDestroyed(),
       debounceTime(100),
       ).subscribe((pokemon) => 
-      this.state.update((state) => ({
-        ...state,
-        team: [
-          ...state.team,
-          {
-            ...pokemon,
-          }
-        ]
-      }))
+        this.state.update((state) => ({
+          ...state,
+          team: [
+            ...state.team,
+            { ...pokemon, }
+          ]
+        }))
     );
 
     this.removePokemon$.pipe(takeUntilDestroyed()).subscribe((id) => {

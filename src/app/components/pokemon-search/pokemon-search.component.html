@@ -1,7 +1,7 @@
 <form [formGroup]="searchForm">
   <p-autoComplete
     formControlName="search"
-    [suggestions]="filteredPokemons"
+    [suggestions]="pokemonResults()"
     (completeMethod)="onSearch($event)"
     (onSelect)="onSelect($event)"
     field="name"

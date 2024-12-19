@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { Pokemon } from '../models/pokeapi-models';
 
@@ -7,11 +7,10 @@ import { Pokemon } from '../models/pokeapi-models';
   providedIn: 'root'
 })
 export class PokeapiService {
+  private http = inject(HttpClient);
 
   private cache: Map<string, any> = new Map<string, Pokemon>();
   private apiUrl: string = 'https://pokeapi.co/api/v2';
-
-  constructor(private http: HttpClient) { }
 
   searchPokemon(query: string): Observable<Pokemon[]> {
     if (this.cache.has(query)) {
@@ -35,7 +34,7 @@ export class PokeapiService {
     );
   }
 
-  getPokemonByName(name: string): Observable<Pokemon> {
+  private getPokemonByName(name: string): Observable<Pokemon> {
     const key = `name-${name}`;
     if (this.cache.has(key)) {
       return of(this.cache.get(key));
@@ -47,7 +46,7 @@ export class PokeapiService {
     }
   }
 
-  getPokemonById(pokemonId: number): Observable<Pokemon> {
+  private getPokemonById(pokemonId: number): Observable<Pokemon> {
     if (this.cache.has(pokemonId.toString())) {
       return of(this.cache.get(pokemonId.toString()));
     }
